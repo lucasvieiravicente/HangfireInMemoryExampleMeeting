@@ -3,6 +3,7 @@ using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System;
 
 namespace ExemploInMemoryMeetingHangfire
@@ -13,6 +14,7 @@ namespace ExemploInMemoryMeetingHangfire
         {
             AdicionarSwaggerGenInfo(services);
             AdicionarHangfire(services);
+            AdicionarLogger(services);
         }
 
         public static void ConfigurarSwagger(this IApplicationBuilder app)
@@ -28,6 +30,11 @@ namespace ExemploInMemoryMeetingHangfire
         {
             app.UseHangfireDashboard();
             app.UseHangfireServer();
+        }
+
+        private static void AdicionarLogger(IServiceCollection services)
+        {
+            services.AddSingleton(Log.Logger);
         }
 
         private static void AdicionarSwaggerGenInfo(IServiceCollection services)

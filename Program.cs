@@ -13,12 +13,12 @@ namespace ExemploInMemoryMeetingHangfire
 
             try
             {
-                Log.Information("Starting up");
+                Log.Information("Iniciando aplicação");
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Application start-up failed");
+                Log.Fatal(ex, "Aplicação falhou ao iniciar");
             }
             finally
             {
