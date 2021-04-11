@@ -1,6 +1,6 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 
 namespace ExemploInMemoryMeetingHangfire
@@ -9,8 +9,8 @@ namespace ExemploInMemoryMeetingHangfire
     [Route("api/[controller]")]
     public class ServicoController : ControllerBase
     {
-        private readonly ILogger<ServicoController> _logger;
-        public ServicoController(ILogger<ServicoController> logger)
+        private readonly ILogger _logger;
+        public ServicoController(ILogger logger)
         {
             _logger = logger;
         }
@@ -21,13 +21,13 @@ namespace ExemploInMemoryMeetingHangfire
             try
             {
                 var idServico = BackgroundJob.Enqueue<Servicos>(x => x.Servico1());
-                _logger.LogInformation("Serviço enfileirado com sucesso");
+                _logger.Information("Serviço enfileirado com sucesso");
 
                 return Ok(idServico);
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.Error(ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -40,12 +40,12 @@ namespace ExemploInMemoryMeetingHangfire
                 var idServico = BackgroundJob.Enqueue<Servicos>(x => x.Servico1());
                 BackgroundJob.ContinueJobWith<Servicos>(idServico, x => x.Servico2());
 
-                _logger.LogInformation("Serviço enfileirado com sucesso");
+                _logger.Information("Serviço enfileirado com sucesso");
                 return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.Error(ex.Message);
                 return BadRequest(ex);
             }
         }
